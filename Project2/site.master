@@ -1,0 +1,43 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="site.master.cs" Inherits="site" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Chapter 9: Reservations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="Scripts/jquery-2.2.4.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/site.css" rel="stylesheet" />
+    <asp:ContentPlaceHolder ID="headContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Disks and Stuff Co.</h1>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="Default.aspx">Home</a></li>
+                <li><a href="Borrower.aspx">Borrower</a></li>
+                <li><a href="disk.aspx">Disks</a></li>
+                <li><a href="artist.aspx">Artists</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <form id="form2" runat="server" class="form-horizontal">
+                <asp:ContentPlaceHolder ID="bodyContent" runat="server">
+                </asp:ContentPlaceHolder>
+            </form>
+        </main>
+        <footer>
+            <asp:ContentPlaceHolder ID="footerContent" runat="server">
+            </asp:ContentPlaceHolder>
+        </footer>
+    </div>
+</body>
+</html>
