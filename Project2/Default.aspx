@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/site.master" AutoEventWireup="true" CodeFile="Borrower.aspx.cs" Inherits="Borrower" ClientIDMode="Static" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/site.master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="Default" ClientIDMode="Static" %>
 <%@ MasterType VirtualPath="~/Site.master" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="headContent" Runat="Server">

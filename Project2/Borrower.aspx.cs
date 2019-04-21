@@ -12,16 +12,4 @@ public partial class Borrower : System.Web.UI.Page
     {
 
     }
-
-    protected void btnSubmit_Click(object sender, EventArgs e)
-    {
-        lblMessage.Text = "New Borrower information Added.";
-    }
-
-    protected void btnClear_Click(object sender, EventArgs e)
-    {
-        txtFirstName.Text = "";
-        txtLastName.Text = "";
-        txtPhone.Text = "";
-    }
 }
