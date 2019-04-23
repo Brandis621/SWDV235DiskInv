@@ -11,4 +11,32 @@ public partial class Artist : System.Web.UI.Page
     {
 
     }
+
+    protected void grdArtist_PreRender(object sender, EventArgs e)
+    {
+        grdArtist.HeaderRow.TableSection = TableRowSection.TableHeader;
+    }
+
+    private string DatabaseErrorMessage(string errorMsg)
+    {
+        return $"<b>A database error has occurred:</b> {errorMsg}";
+    }
+    private string ConcurrencyErrorMessage()
+    {
+        return "Another user may have updated that category. Please try again";
+    }
+
+    protected void dvArtist_ItemInserted(object sender, DetailsViewInsertedEventArgs e)
+    {
+        if (e.Exception != null)
+        {
+            lblError.Text = DatabaseErrorMessage(e.Exception.Message);
+            e.ExceptionHandled = true;
+        }
+        else if (e.AffectedRows == 0)
+        {
+            lblError.Text = ConcurrencyErrorMessage();
+        }
+
+    }
 }
