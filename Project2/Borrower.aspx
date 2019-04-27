@@ -6,7 +6,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="headContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="bodyContent" Runat="Server">
-<!-- Name            Date        Message
+    <!-- Name            Date        Message
      Aaron Smith     4/22/19     Fixed Data view insert, update and delete-->
 
     <h2>Borrowers</h2>
@@ -14,7 +14,8 @@
             <asp:GridView ID="grdBorrower" runat="server" SelectedIndex="0"
                             AutoGenerateColumns="False" DataKeyNames="borrower_id" 
                             DataSourceID="SqlDataSource1" AllowPaging="True" 
-                            CssClass="table table-bordered table-striped table-condensed">
+                            CssClass="table table-bordered table-striped table-condensed" CellPadding="4" ForeColor="#333333" GridLines="None">
+                            <AlternatingRowStyle BackColor="White" />
                             <Columns>
                                 <asp:BoundField DataField="borrower_ID" HeaderText="ID" 
                                     ReadOnly="True">
@@ -33,10 +34,17 @@
                                     <ItemStyle CssClass="col-xs-1" />
                                 </asp:CommandField>
                             </Columns>
-                            <PagerSettings Mode="NumericFirstLast" />
+                            <EditRowStyle BackColor="#2461BF" />
+                            <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                            <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
                             <PagerStyle CssClass="pagerStyle" 
-                                BackColor="#8c8c8c" HorizontalAlign="Center" />
-                            <SelectedRowStyle CssClass="warning" />
+                                BackColor="#2461BF" HorizontalAlign="Center" ForeColor="White" />
+                            <RowStyle BackColor="#EFF3FB" />
+                            <SelectedRowStyle CssClass="warning" BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
+                            <SortedAscendingCellStyle BackColor="#F5F7FB" />
+                            <SortedAscendingHeaderStyle BackColor="#6D95E1" />
+                            <SortedDescendingCellStyle BackColor="#E9EBEF" />
+                            <SortedDescendingHeaderStyle BackColor="#4870BE" />
                         </asp:GridView>
             <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:diskInvConnection2 %>" SelectCommand="SELECT * FROM [borrower]"></asp:SqlDataSource>
             <!--Details view for editing data -->

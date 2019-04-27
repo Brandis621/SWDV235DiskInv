@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Chapter 9: Reservations</title>
+    <title>Disks and Co.</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="Scripts/jquery-2.2.4.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script>
@@ -25,11 +25,12 @@
                 <li><a href="Borrower.aspx">Borrower</a></li>
                 <li><a href="disk.aspx">Disks</a></li>
                 <li><a href="artist.aspx">Artists</a></li>
+                <li><a href="checkout.aspx">Checkout</a></li>
             </ul>
         </nav>
 
         <main>
-            <form id="form2" runat="server" class="form-horizontal">
+            <form id="form1" runat="server" class="form-horizontal">
                 <asp:ContentPlaceHolder ID="bodyContent" runat="server">
                 </asp:ContentPlaceHolder>
             </form>
