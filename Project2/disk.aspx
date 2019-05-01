@@ -7,7 +7,8 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="bodyContent" Runat="Server">
     <!-- Name            Date        Message
-     Aaron Smith     4/22/19     Fixed Data view insert, update and delete-->
+     Aaron Smith     4/22/19     Fixed Data view insert, update and delete
+     Aaron Smith     5/1/2019    Added validation, made gridview update when data is changed-->
     
     <h2>Disk Inventory</h2>
     <!--Gridview for displaying data -->
@@ -44,13 +45,15 @@
                             <SortedDescendingHeaderStyle BackColor="#4870BE" />
                         </asp:GridView>
             <!--Details view for editing data -->
-                <asp:DetailsView ID="dvDisk" runat="server" AutoGenerateRows="False" DataKeyNames="disk_id" DataSourceID="SqlDataSource2" Height="50px" Width="251px" CellPadding="4" ForeColor="#333333" GridLines="None">
+                 <asp:ValidationSummary ID="vsDisk" runat="server" HeaderText="* means that the field is required" ValidationGroup="vsDisk" CssClass="text-danger"/>
+
+                <asp:DetailsView ID="dvDisk" runat="server" AutoGenerateRows="False" DataKeyNames="disk_id" DataSourceID="SqlDataSource2" Height="50px" Width="336px" CellPadding="4" ForeColor="#333333" GridLines="None" OnItemInserted="dvDisk_ItemInserted" OnItemUpdated="dvDisk_ItemUpdated" OnItemDeleted="dvDisk_ItemDeleted">
                     <AlternatingRowStyle BackColor="White" />
                     <CommandRowStyle BackColor="#D1DDF1" Font-Bold="True" />
                     <EditRowStyle BackColor="#2461BF" />
                     <FieldHeaderStyle BackColor="#DEE8F5" Font-Bold="True" />
                     <Fields>
-                        <asp:TemplateField HeaderText="disk_id" InsertVisible="False" SortExpression="disk_id">
+                        <asp:TemplateField HeaderText="Disk ID" InsertVisible="False" SortExpression="disk_id">
                             <EditItemTemplate>
                                 <asp:Label ID="Label1" runat="server" Text='<%# Eval("disk_id") %>'></asp:Label>
                             </EditItemTemplate>
@@ -58,68 +61,103 @@
                                 <asp:Label ID="Label1" runat="server" Text='<%# Bind("disk_id") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="disk_name" SortExpression="disk_name">
+                        <asp:TemplateField HeaderText="Disk Name" SortExpression="disk_name">
                             <EditItemTemplate>
-                                <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("disk_name") %>'></asp:TextBox>
+                                <asp:TextBox ID="txtEditDiskName" runat="server" Text='<%# Bind("disk_name") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvEditDiskName" runat="server" text="*" ValidationGroup="vsDisk" ErrorMessage="Disk Name is Required" ControlToValidate="txtEditDiskName" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
                             </EditItemTemplate>
                             <InsertItemTemplate>
-                                <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("disk_name") %>'></asp:TextBox>
+                                <asp:TextBox ID="txtInsertDiskName" runat="server" Text='<%# Bind("disk_name") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvInsertDiskName" runat="server" text="*" ValidationGroup="vsDisk" ErrorMessage="Disk Name is Required" ControlToValidate="txtInsertDiskName" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
                             </InsertItemTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="Label2" runat="server" Text='<%# Bind("disk_name") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="release_date" SortExpression="release_date">
+                        <asp:TemplateField HeaderText="Release Date" SortExpression="release_date">
                             <EditItemTemplate>
-                                <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("release_date") %>'></asp:TextBox>
+                                <asp:TextBox ID="txtEditRelease" runat="server" Text='<%# Bind("release_date") %>' CssClass="float-left" TextMode="Date"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvEditRelease" runat="server" text="*" ValidationGroup="vsDisk" ErrorMessage="Release Date is Required" ControlToValidate="txtEditRelease" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
                             </EditItemTemplate>
                             <InsertItemTemplate>
-                                <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("release_date") %>'></asp:TextBox>
+                                <asp:TextBox ID="txtInsertRelease" runat="server" Text='<%# Bind("release_date") %>' CssClass="float-left" TextMode="Date"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvInsertRelease" runat="server" text="*" ValidationGroup="vsDisk" ErrorMessage="Release Date is Required" ControlToValidate="txtInsertRelease" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
                             </InsertItemTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="Label3" runat="server" Text='<%# Bind("release_date") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="status_id" SortExpression="status_id">
+                        <asp:TemplateField HeaderText="Status ID" SortExpression="status_id">
                             <EditItemTemplate>
-                                <asp:TextBox ID="TextBox3" runat="server" Text='<%# Bind("status_id") %>'></asp:TextBox>
+                                <asp:TextBox ID="txtEditStatus" runat="server" Text='<%# Bind("status_id") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvEditStatus" runat="server" text="*" ValidationGroup="vsDisk" ErrorMessage="Status is Required" ControlToValidate="txtEditStatus" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
+                                <asp:CompareValidator ID="cvEditStatus1" runat="server" ErrorMessage="Status ID must be a number: 1.)In stock 2.)On loan 3.)Damaged 4.)Unavailable" Text="*" ValidationGroup="vsDisk" Operator="GreaterThanEqual" Type="Integer" ControlToValidate="txtEditStatus" ValueToCompare="1">
+                                </asp:CompareValidator>
+                                <asp:CompareValidator ID="cvEditStatus2" runat="server" ErrorMessage="Status ID must be a number: 1.)In stock 2.)On loan 3.)Damaged 4.)Unavailable" Text="*" ValidationGroup="vsDisk" Operator="LessThanEqual" Type="Integer" ControlToValidate="txtEditStatus" ValueToCompare="4">
+                                </asp:CompareValidator>
                             </EditItemTemplate>
                             <InsertItemTemplate>
-                                <asp:TextBox ID="TextBox3" runat="server" Text='<%# Bind("status_id") %>'></asp:TextBox>
+                                <asp:TextBox ID="txtEditStatus" runat="server" Text='<%# Bind("status_id") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvInsertStatus" runat="server" text="*" ValidationGroup="vsDisk" ErrorMessage="Status is Required" ControlToValidate="txtEditStatus" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
+                                <asp:CompareValidator ID="cvInsertStatus1" runat="server" ErrorMessage="Status ID must be a number: 1.)In stock 2.)On loan 3.)Damaged 4.)Unavailable" Text="*" ValidationGroup="vsDisk" Operator="GreaterThanEqual" Type="Integer" ControlToValidate="txtInsertStatus" ValueToCompare="1">
+                                </asp:CompareValidator>
+                                <asp:CompareValidator ID="cvInsertStatus2" runat="server" ErrorMessage="Status ID must be a number: 1.)In stock 2.)On loan 3.)Damaged 4.)Unavailable" Text="*" ValidationGroup="vsDisk" Operator="LessThanEqual" Type="Integer" ControlToValidate="txtInsertStatus" ValueToCompare="4">
+                                </asp:CompareValidator>
                             </InsertItemTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="Label4" runat="server" Text='<%# Bind("status_id") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="genre_id" SortExpression="genre_id">
+                        <asp:TemplateField HeaderText="Genre ID" SortExpression="genre_id">
                             <EditItemTemplate>
-                                <asp:TextBox ID="TextBox4" runat="server" Text='<%# Bind("genre_id") %>'></asp:TextBox>
+                                <asp:TextBox ID="txtEditGenre" runat="server" Text='<%# Bind("genre_id") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvEditGenre" runat="server" text="*" ValidationGroup="vsDisk" ErrorMessage="Status is Required" ControlToValidate="txtEditGenre" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
+                                <asp:CompareValidator ID="cvEditGenre1" runat="server" ErrorMessage="Genre ID must be a number: 1.)Rock 2.)Metal 3.)Pop 4.)Country 5.)Rap 6.)R&B 7.)Classic 8.)Punk 9.)Reggae" Text="*" ValidationGroup="vsDisk" Operator="GreaterThanEqual" Type="Integer" ControlToValidate="txtEditGenre" ValueToCompare="1">
+                                </asp:CompareValidator>
+                                <asp:CompareValidator ID="cvEditGenre2" runat="server" ErrorMessage="Genre ID must be a number: 1.)Rock 2.)Metal 3.)Pop 4.)Country 5.)Rap 6.)R&B 7.)Classic 8.)Punk 9.)Reggae" Text="*" ValidationGroup="vsDisk" Operator="LessThanEqual" Type="Integer" ControlToValidate="txtEditGenre" ValueToCompare="9">
+                                </asp:CompareValidator>
                             </EditItemTemplate>
                             <InsertItemTemplate>
-                                <asp:TextBox ID="TextBox4" runat="server" Text='<%# Bind("genre_id") %>'></asp:TextBox>
+                                <asp:TextBox ID="txtInsertGenre" runat="server" Text='<%# Bind("genre_id") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvInsertGenre" runat="server" text="*" ValidationGroup="vsDisk" ErrorMessage="Status is Required" ControlToValidate="txtInsertGenre" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
+                                <asp:CompareValidator ID="cvInsertGenre1" runat="server" ErrorMessage="Genre ID must be a number: 1.)Rock 2.)Metal 3.)Pop 4.)Country 5.)Rap 6.)R&B 7.)Classic 8.)Punk 9.)Reggae" Text="*" ValidationGroup="vsDisk" Operator="GreaterThanEqual" Type="Integer" ControlToValidate="txtInsertGenre" ValueToCompare="1">
+                                </asp:CompareValidator>
+                                <asp:CompareValidator ID="cvInsertGenre2" runat="server" ErrorMessage="Genre ID must be a number: 1.)Rock 2.)Metal 3.)Pop 4.)Country 5.)Rap 6.)R&B 7.)Classic 8.)Punk 9.)Reggae" Text="*" ValidationGroup="vsDisk" Operator="LessThanEqual" Type="Integer" ControlToValidate="txtInsertGenre" ValueToCompare="9">
+                                </asp:CompareValidator>
                             </InsertItemTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="Label5" runat="server" Text='<%# Bind("genre_id") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="disk_type_id" SortExpression="disk_type_id">
+                        <asp:TemplateField HeaderText="Disk Type ID" SortExpression="disk_type_id">
                             <EditItemTemplate>
-                                <asp:TextBox ID="TextBox5" runat="server" Text='<%# Bind("disk_type_id") %>'></asp:TextBox>
+                                <asp:TextBox ID="txtEditDiskType" runat="server" Text='<%# Bind("disk_type_id") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvEditDiskType" runat="server" text="*" ValidationGroup="vsDisk" ErrorMessage="Status is Required" ControlToValidate="txtEditDiskType" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
+                                <asp:CompareValidator ID="cvEditDiskType1" runat="server" ErrorMessage="Disk Type ID must be a number: 1.)CD 2.)Cassette 3.)Record" Text="*" ValidationGroup="vsDisk" Operator="GreaterThanEqual" Type="Integer" ControlToValidate="txtEditDiskType" ValueToCompare="1">
+                                </asp:CompareValidator>
+                                <asp:CompareValidator ID="cvEditDiskType2" runat="server" ErrorMessage="Disk Type ID must be a number: 1.)CD 2.)Cassette 3.)Record" Text="*" ValidationGroup="vsDisk" Operator="LessThanEqual" Type="Integer" ControlToValidate="txtEditDiskType" ValueToCompare="3">
+                                </asp:CompareValidator>
                             </EditItemTemplate>
                             <InsertItemTemplate>
-                                <asp:TextBox ID="TextBox5" runat="server" Text='<%# Bind("disk_type_id") %>'></asp:TextBox>
+                                <asp:TextBox ID="txtInsertDiskType" runat="server" Text='<%# Bind("disk_type_id") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvInsertDiskType" runat="server" text="*" ValidationGroup="vsDisk" ErrorMessage="Status is Required" ControlToValidate="txtInsertDiskType" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
+                                <asp:CompareValidator ID="cvInsertDiskType1" runat="server" ErrorMessage="Disk Type ID must be a number: 1.)CD 2.)Cassette 3.)Record" Text="*" ValidationGroup="vsDisk" Operator="GreaterThanEqual" Type="Integer" ControlToValidate="txtInsertDiskType" ValueToCompare="1">
+                                </asp:CompareValidator>
+                                <asp:CompareValidator ID="cvInsertDiskType2" runat="server" ErrorMessage="Disk Type ID must be a number: 1.)CD 2.)Cassette 3.)Record" Text="*" ValidationGroup="vsDisk" Operator="LessThanEqual" Type="Integer" ControlToValidate="txtInsertDiskType" ValueToCompare="3">
+                                </asp:CompareValidator>
                             </InsertItemTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="Label6" runat="server" Text='<%# Bind("disk_type_id") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" ShowInsertButton="True" />
+                        <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" ShowInsertButton="True" ValidationGroup="vsDisk"/>
                     </Fields>
                     <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
                     <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
                     <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
                     <RowStyle BackColor="#EFF3FB" />
     </asp:DetailsView>
+            <br />
             <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:diskInvConnection2 %>" SelectCommand="SELECT * FROM [disk]"></asp:SqlDataSource>
             
     <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:diskInvConnection2 %>" SelectCommand="SELECT * FROM [disk] WHERE ([disk_id] = @disk_id)" DeleteCommand="EXEC sp_diskdelete @disk_id" InsertCommand="EXEC sp_diskinsert @disk_name, @release_date, @status_id, @genre_id, @disk_type_id" UpdateCommand="EXEC sp_diskupdate @disk_id, @disk_name, @release_date, @status_id, @genre_id, @disk_type_id">
@@ -147,5 +185,10 @@
     </asp:SqlDataSource>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="footerContent" Runat="Server">
+    <p>
+    <br />
+</p>
+<p>
+</p>
 </asp:Content>
 

@@ -12,4 +12,19 @@ public partial class Borrower : System.Web.UI.Page
     {
 
     }
+
+    protected void dvDisk_ItemInserted(object sender, DetailsViewInsertedEventArgs e)
+    {
+        grdBorrower.DataSourceID = "SqlDataSource1";
+    }
+
+    protected void dvDisk_ItemUpdated(object sender, DetailsViewUpdatedEventArgs e)
+    {
+        grdBorrower.DataSourceID = "SqlDataSource1";
+    }
+
+    protected void dvDisk_ItemDeleted(object sender, DetailsViewDeletedEventArgs e)
+    {
+        grdBorrower.DataSourceID = "SqlDataSource1";
+    }
 }

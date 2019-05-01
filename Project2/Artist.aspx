@@ -4,8 +4,9 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="headContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="bodyContent" Runat="Server">
-<!-- Name            Date        Message
-     Aaron Smith     4/22/19     Fixed Data view insert, update and delete-->
+    <!-- Name            Date        Message
+     Aaron Smith     4/22/19     Fixed Data view insert, update and delete
+     Aaron Smith     5/1/2019    Added validation, made gridview update when data is changed-->
 
     <h2>Artist Library</h2>
             <!--Gridview for displaying data -->
@@ -43,13 +44,14 @@
             
                 <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:diskInvConnection2 %>" SelectCommand="SELECT * FROM [artist]"></asp:SqlDataSource>
             <!--Details view for editing data -->
-                <asp:DetailsView ID="dvArtist" runat="server" AutoGenerateRows="False" DataKeyNames="artist_id" DataSourceID="SqlDataSource2" Height="50px" Width="251px" CellPadding="4" ForeColor="#333333" GridLines="None" OnItemInserted="dvArtist_ItemInserted">
+                <asp:ValidationSummary ID="vsArtist" runat="server" HeaderText="* means that the field is required" ValidationGroup="vsArtist" CssClass="text-danger"/>
+                <asp:DetailsView ID="dvArtist" runat="server" AutoGenerateRows="False" DataKeyNames="artist_id" DataSourceID="SqlDataSource2" Height="50px" Width="325px" CellPadding="4" ForeColor="#333333" GridLines="None" OnItemInserted="dvArtist_ItemInserted" OnItemUpdated="dvArtist_ItemUpdated" OnItemDeleted="dvArtist_ItemDeleted">
                     <AlternatingRowStyle BackColor="White" />
                     <CommandRowStyle BackColor="#D1DDF1" Font-Bold="True" />
                     <EditRowStyle BackColor="#2461BF" />
                     <FieldHeaderStyle BackColor="#DEE8F5" Font-Bold="True" />
                     <Fields>
-                        <asp:TemplateField HeaderText="artist_id" InsertVisible="False" SortExpression="artist_id">
+                        <asp:TemplateField HeaderText="Artist ID" InsertVisible="False" SortExpression="artist_id">
                             <EditItemTemplate>
                                 <asp:Label ID="Label1" runat="server" Text='<%# Eval("artist_id") %>'></asp:Label>
                             </EditItemTemplate>
@@ -57,56 +59,60 @@
                                 <asp:Label ID="Label1" runat="server" Text='<%# Bind("artist_id") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="fname" SortExpression="fname">
+                        <asp:TemplateField HeaderText="First Name" SortExpression="fname">
                             <EditItemTemplate>
-                                <asp:TextBox ID="txtEditFName" runat="server" Text='<%# Bind("fname") %>'></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="rfvEditFName" runat="server" ErrorMessage="First Name (or group name) is Required" ControlToValidate="txtEditFName"></asp:RequiredFieldValidator>
-                                <asp:CompareValidator ID="cvEditFName" runat="server" ErrorMessage="Name must be in characters" ControlToValidate="txtEditFName" Operator="DataTypeCheck" Type="string"></asp:CompareValidator>
+                                <asp:TextBox ID="txtEditFName" runat="server" Text='<%# Bind("fname") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvEditFName" runat="server" text="*" ValidationGroup="vsArtist" ErrorMessage="First Name (or group name) is Required" ControlToValidate="txtEditFName" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
                             </EditItemTemplate>
                             <InsertItemTemplate>
-                                <asp:TextBox ID="txtInsertFName" runat="server" Text='<%# Bind("fname") %>'></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="rfvInsertFName" runat="server" ErrorMessage="First Name (or group name) is Required" ControlToValidate="txtInsertFName"></asp:RequiredFieldValidator>
-                                <asp:CompareValidator ID="cvInsertFName" runat="server" ErrorMessage="Name must be in characters" ControlToValidate="txtInsertFName" Operator="DataTypeCheck" Type="string"></asp:CompareValidator>
+                                <asp:TextBox ID="txtInsertFName" runat="server" Text='<%# Bind("fname") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvInsertFName" runat="server" text="*" ValidationGroup="vsArtist" ErrorMessage="First Name (or group name) is Required" ControlToValidate="txtInsertFName" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
                             </InsertItemTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="Label2" runat="server" Text='<%# Bind("fname") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="lname" SortExpression="lname">
+                        <asp:TemplateField HeaderText="Last Name" SortExpression="lname">
                             <EditItemTemplate>
                                 <asp:TextBox ID="txtEditLName" runat="server" Text='<%# Bind("lname") %>'></asp:TextBox>
-                                <asp:CompareValidator ID="cvEditLName" runat="server" ErrorMessage="Name must be in characters" ControlToValidate="txtEditLName" Operator="DataTypeCheck" Type="string"></asp:CompareValidator>
                             </EditItemTemplate>
                             <InsertItemTemplate>
                                 <asp:TextBox ID="txtInsertLName" runat="server" Text='<%# Bind("lname") %>'></asp:TextBox>
-                                <asp:CompareValidator ID="cvInsertLName" runat="server" ErrorMessage="Name must be in characters" ControlToValidate="txtInsertLName" Operator="DataTypeCheck" Type="string"></asp:CompareValidator>
                             </InsertItemTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="Label3" runat="server" Text='<%# Bind("lname") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="artist_type" SortExpression="artist_type">
+                        <asp:TemplateField HeaderText="Artist Type" SortExpression="artist_type">
                             <EditItemTemplate>
-                                <asp:TextBox ID="txtEditArtistType" runat="server" Text='<%# Bind("artist_type") %>'></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="rfvEditArtistType" runat="server" ErrorMessage="Artist Type must be a 1(Group) or 2 (Solo)." ControlToValidate="txtEditArtistType"></asp:RequiredFieldValidator>
-                                <asp:CompareValidator ID="cvEditArtistTypeInt" runat="server" ErrorMessage="Artist Type must be a 1(Group) or 2 (Solo)." ControlToValidate="txtEditArtistType" Operator="DataTypeCheck" Type="Integer"></asp:CompareValidator>
+                                <asp:TextBox ID="txtEditArtistType" runat="server" Text='<%# Bind("artist_type") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvEditArtistType" runat="server" text="*" ValidationGroup="vsArtist" ErrorMessage="Artist Type must be a 1(Group) or 2 (Solo)." ControlToValidate="txtEditArtistType" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
+                                <asp:CompareValidator ID="cvEditArtistType1" runat="server" ErrorMessage="Artist Type must be a number: 1.)Group 2.)Solo" Text="*" ValidationGroup="vsArtist" Operator="GreaterThanEqual" Type="Integer" ControlToValidate="txtEditArtistType" ValueToCompare="1">
+                                </asp:CompareValidator>
+                                <asp:CompareValidator ID="cvEditArtistType2" runat="server" ErrorMessage="Artist Type must be a number: 1.)Group 2.)Solo" Text="*" ValidationGroup="vsArtist" Operator="LessThanEqual" Type="Integer" ControlToValidate="txtEditArtistType" ValueToCompare="2">
+                                </asp:CompareValidator>
                             </EditItemTemplate>
                             <InsertItemTemplate>
-                                <asp:TextBox ID="txtInsertArtistType" runat="server" Text='<%# Bind("artist_type") %>'></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="rfvInsertArtistType" runat="server" ErrorMessage="Artist Type is required." ControlToValidate="txtInsertArtistType"></asp:RequiredFieldValidator>
-                                <asp:CompareValidator ID="cvInsertArtistTypeInt" runat="server" ErrorMessage="Artist Type must be a 1(Group) or 2 (Solo)." ControlToValidate="txtInsertArtistType" Operator="DataTypeCheck" Type="Integer"></asp:CompareValidator>
+                                <asp:TextBox ID="txtInsertArtistType" runat="server" Text='<%# Bind("artist_type") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvInsertArtistType" runat="server" text="*" ValidationGroup="vsArtist" ErrorMessage="Artist Type is required." ControlToValidate="txtInsertArtistType" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
+                                <asp:CompareValidator ID="cvInsertArtistType1" runat="server" ErrorMessage="Artist Type must be a number: 1.)Group 2.)Solo" Text="*" ValidationGroup="vsArtist" Operator="GreaterThanEqual" Type="Integer" ControlToValidate="txtInsertArtistType" ValueToCompare="1">
+                                </asp:CompareValidator>
+                                <asp:CompareValidator ID="cvInsertArtistType2" runat="server" ErrorMessage="Artist Type must be a number: 1.)Group 2.)Solo" Text="*" ValidationGroup="vsArtist" Operator="LessThanEqual" Type="Integer" ControlToValidate="txtInsertArtistType" ValueToCompare="2">
+                                </asp:CompareValidator>
                             </InsertItemTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="Label4" runat="server" Text='<%# Bind("artist_type") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" ShowInsertButton="True" />
+                        <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" ShowInsertButton="True" ValidationGroup="vsArtist" />
                     </Fields>
                     <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
                     <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
                     <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
                     <RowStyle BackColor="#EFF3FB" />
-    </asp:DetailsView>
+                </asp:DetailsView>
+            
+            <br />
             <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:diskInvConnection2 %>" SelectCommand="SELECT * FROM [artist] WHERE ([artist_id] = @artist_id)" 
                 DeleteCommand="EXEC sp_artistdelete @artist_id" 
                 InsertCommand="EXEC sp_artistinsert @fname, @lname, @artist_type"
@@ -132,5 +138,8 @@
     <asp:Label ID="lblError" runat="server"></asp:Label>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="footerContent" Runat="Server">
+    <p>
+    <br />
+</p>
 </asp:Content>
 

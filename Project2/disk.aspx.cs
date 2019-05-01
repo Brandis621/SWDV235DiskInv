@@ -11,4 +11,19 @@ public partial class Disk : System.Web.UI.Page
     {
 
     }
+
+    protected void dvDisk_ItemInserted(object sender, DetailsViewInsertedEventArgs e)
+    {
+        grdDisk.DataSourceID = "SqlDataSource1";
+    }
+
+    protected void dvDisk_ItemUpdated(object sender, DetailsViewUpdatedEventArgs e)
+    {
+        grdDisk.DataSourceID = "SqlDataSource1";
+    }
+
+    protected void dvDisk_ItemDeleted(object sender, DetailsViewDeletedEventArgs e)
+    {
+        grdDisk.DataSourceID = "SqlDataSource1";
+    }
 }

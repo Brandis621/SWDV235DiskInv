@@ -7,7 +7,8 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="bodyContent" Runat="Server">
     <!-- Name            Date        Message
-     Aaron Smith     4/22/19     Fixed Data view insert, update and delete-->
+     Aaron Smith     4/22/19     Fixed Data view insert, update and delete
+     Aaron Smith     5/1/2019    Added validation, made gridview update when data is changed-->
 
     <h2>Borrowers</h2>
             <!--Gridview for displaying data -->
@@ -48,23 +49,83 @@
                         </asp:GridView>
             <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:diskInvConnection2 %>" SelectCommand="SELECT * FROM [borrower]"></asp:SqlDataSource>
             <!--Details view for editing data -->
-                <asp:DetailsView ID="dvDisk" runat="server" AutoGenerateRows="False" DataKeyNames="borrower_id" DataSourceID="SqlDataSource2" Height="50px" Width="251px" CellPadding="4" ForeColor="#333333" GridLines="None">
+                <asp:ValidationSummary ID="vsBorrower" runat="server" HeaderText="* means that the field is required" ValidationGroup="vsBorrower" CssClass="text-danger"/>
+
+                <asp:DetailsView ID="dvDisk" runat="server" AutoGenerateRows="False" DataKeyNames="borrower_id" DataSourceID="SqlDataSource2" Height="50px" Width="318px" CellPadding="4" ForeColor="#333333" GridLines="None" OnItemInserted="dvDisk_ItemInserted" OnItemUpdated="dvDisk_ItemUpdated" OnItemDeleted="dvDisk_ItemDeleted">
                     <AlternatingRowStyle BackColor="White" />
                     <CommandRowStyle BackColor="#D1DDF1" Font-Bold="True" />
                     <EditRowStyle BackColor="#2461BF" />
                     <FieldHeaderStyle BackColor="#DEE8F5" Font-Bold="True" />
                     <Fields>
-                        <asp:BoundField DataField="borrower_id" HeaderText="borrower_id" InsertVisible="False" ReadOnly="True" SortExpression="borrower_id" />
-                        <asp:BoundField DataField="fname" HeaderText="fname" SortExpression="fname" />
-                        <asp:BoundField DataField="lname" HeaderText="lname" SortExpression="lname" />
-                        <asp:BoundField DataField="phoneNumber" HeaderText="phoneNumber" SortExpression="phoneNumber" />
-                        <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" ShowInsertButton="True" />
+                        <asp:TemplateField HeaderText="Borrower ID" InsertVisible="False" SortExpression="borrower_id">
+                            <EditItemTemplate>
+                                <asp:Label ID="Label1" runat="server" Text='<%# Eval("borrower_id") %>'></asp:Label>
+                            </EditItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label ID="Label1" runat="server" Text='<%# Bind("borrower_id") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="First Name" SortExpression="fname">
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtEditFName" runat="server" Text='<%# Bind("fname") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvEditFName" runat="server" text="*" ValidationGroup="vsBorrower" ErrorMessage="First Name is Required" ControlToValidate="txtEditFName" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
+                            </EditItemTemplate>
+                            <InsertItemTemplate>
+                                <asp:TextBox ID="txtInsertFName" runat="server" Text='<%# Bind("fname") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvInsertFName" runat="server" text="*" ValidationGroup="vsBorrower" ErrorMessage="First Name is Required" ControlToValidate="txtInsertFName" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
+                            </InsertItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label ID="Label2" runat="server" Text='<%# Bind("fname") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Last Name" SortExpression="lname">
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtEditLName" runat="server" Text='<%# Bind("lname") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvEditLName" runat="server" text="*" ValidationGroup="vsBorrower" ErrorMessage="Last Name is Required" ControlToValidate="txtEditLName" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
+                            </EditItemTemplate>
+                            <InsertItemTemplate>
+                                <asp:TextBox ID="txtInsertLName" runat="server" Text='<%# Bind("lname") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvInsertLName" runat="server" text="*" ValidationGroup="vsBorrower" ErrorMessage="Last Name is Required" ControlToValidate="txtInsertLName" Display="Dynamic" CssClass="text-danger"></asp:RequiredFieldValidator>
+                            </InsertItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label ID="Label3" runat="server" Text='<%# Bind("lname") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Phone Number" SortExpression="phoneNumber">
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtEditPhone" runat="server" Text='<%# Bind("phoneNumber") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvEditPhone" runat="server" ValidationGroup="vsBorrower"
+                                    ControlToValidate="txtEditPhone" text="*" ErrorMessage="Phone Number is required" CssClass="text-danger" Display="Dynamic">
+                                </asp:RequiredFieldValidator>
+                                <asp:RegularExpressionValidator ID="revEditPhone" runat="server" ValidationGroup="vsBorrower"
+                                    ControlToValidate="txtEditPhone" Text="*" ErrorMessage="Use this format: 999-999-9999"
+                                    Display="Dynamic" CssClass="text-danger" 
+                                    ValidationExpression="((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}">
+                                </asp:RegularExpressionValidator>   
+                            </EditItemTemplate>
+                            <InsertItemTemplate>
+                                <asp:TextBox ID="txtInsertPhone" runat="server" Text='<%# Bind("phoneNumber") %>' CssClass="float-left"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvInsertPhone" runat="server" ValidationGroup="vsBorrower"
+                                    ControlToValidate="txtInsertPhone" text="*" ErrorMessage="Phone Number is required" CssClass="text-danger" Display="Dynamic">
+                                </asp:RequiredFieldValidator>
+                                <asp:RegularExpressionValidator ID="revEditPhone" runat="server" ValidationGroup="vsBorrower"
+                                    ControlToValidate="txtInsertPhone" Text="*" ErrorMessage="Use this format: 999-999-9999"
+                                    Display="Dynamic" CssClass="text-danger" 
+                                    ValidationExpression="((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}">
+                                </asp:RegularExpressionValidator>   
+                            </InsertItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label ID="Label4" runat="server" Text='<%# Bind("phoneNumber") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" ShowInsertButton="True" ValidationGroup="vsBorrower" />
                     </Fields>
                     <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
                     <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
                     <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
                     <RowStyle BackColor="#EFF3FB" />
     </asp:DetailsView>
+    <br />
     <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:diskInvConnection2 %>" SelectCommand="SELECT * FROM [borrower] WHERE ([borrower_id] = @borrower_id)" DeleteCommand="EXEC sp_borrowerdelete @borrower_id" InsertCommand="EXEC sp_borrowerinsert @fname, @lname, @phoneNumber" UpdateCommand="EXEC sp_borrowerUpdate @borrower_id, @fname, @lname, @phoneNumber ">
         <DeleteParameters>
             <asp:Parameter Name="borrower_id" Type="Int32" />
@@ -87,5 +148,8 @@
     
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="footerContent" Runat="Server">
+    <p>
+    <br />
+</p>
 </asp:Content>
 

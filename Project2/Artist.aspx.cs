@@ -21,10 +21,6 @@ public partial class Artist : System.Web.UI.Page
     {
         return $"<b>A database error has occurred:</b> {errorMsg}";
     }
-    private string ConcurrencyErrorMessage()
-    {
-        return "Another user may have updated that category. Please try again";
-    }
 
     protected void dvArtist_ItemInserted(object sender, DetailsViewInsertedEventArgs e)
     {
@@ -33,10 +29,20 @@ public partial class Artist : System.Web.UI.Page
             lblError.Text = DatabaseErrorMessage(e.Exception.Message);
             e.ExceptionHandled = true;
         }
-        else if (e.AffectedRows == 0)
+        else
         {
-            lblError.Text = ConcurrencyErrorMessage();
+            grdArtist.DataSourceID = "SqlDataSource1";
         }
 
+    }
+
+    protected void dvArtist_ItemUpdated(object sender, DetailsViewUpdatedEventArgs e)
+    {
+        grdArtist.DataSourceID = "SqlDataSource1";
+    }
+
+    protected void dvArtist_ItemDeleted(object sender, DetailsViewDeletedEventArgs e)
+    {
+        grdArtist.DataSourceID = "SqlDataSource1";
     }
 }

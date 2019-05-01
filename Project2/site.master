@@ -19,13 +19,13 @@
             <h1>Disks and Stuff Co.</h1>
         </header>
 
-        <nav>
-            <ul>
-                <li><a href="Default.aspx">Home</a></li>
-                <li><a href="Borrower.aspx">Borrower</a></li>
-                <li><a href="disk.aspx">Disks</a></li>
-                <li><a href="artist.aspx">Artists</a></li>
-                <li><a href="checkout.aspx">Checkout</a></li>
+        <nav class="nav navbar navbar-expand">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active"><a class="nav-link" href="Default.aspx">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="Borrower.aspx">Borrower</a></li>
+                <li class="nav-item"><a class="nav-link" href="disk.aspx">Disks</a></li>
+                <li class="nav-item"><a class="nav-link" href="artist.aspx">Artists</a></li>
+                <li class="nav-item"><a class="nav-link" href="checkout.aspx">Checkout</a></li>
             </ul>
         </nav>
 

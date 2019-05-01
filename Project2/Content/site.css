@@ -34,3 +34,15 @@ ul {
     border-bottom: 1px solid rebeccapurple;
     margin-right: 1em;
 }
+
+nav {
+    width: 75%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.navbar-nav>li {
+    float: none;
+    text-align: center;
+    display: inline-block;
+}

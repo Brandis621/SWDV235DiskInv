@@ -67,6 +67,8 @@
         <SortedDescendingHeaderStyle BackColor="#4870BE" />
     </asp:GridView>
 
+    <br />
+
     <%--Data Sources--%>
     <asp:SqlDataSource ID="DropDownBorrower" runat="server" ConnectionString="<%$ ConnectionStrings:diskInvConnection2 %>" SelectCommand="SELECT borrower_id, 'Name'=[fName]+' '+[lName]FROM [borrower]"></asp:SqlDataSource>
     <asp:SqlDataSource ID="DropDownDisk" runat="server" ConnectionString="<%$ ConnectionStrings:diskInvConnection2 %>" SelectCommand="SELECT [disk_id], [disk_name] FROM [disk]"></asp:SqlDataSource>
@@ -79,5 +81,8 @@
 
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="footerContent" Runat="Server">
+    <p>
+    <br />
+</p>
 </asp:Content>
 
