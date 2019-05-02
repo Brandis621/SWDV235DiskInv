@@ -35,14 +35,8 @@ ul {
     margin-right: 1em;
 }
 
-nav {
-    width: 75%;
-    margin-right: auto;
-    margin-left: auto;
-}
-
 .navbar-nav>li {
-    float: none;
+    float: left;
     text-align: center;
     display: inline-block;
 }
